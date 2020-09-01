@@ -1,6 +1,6 @@
 <template>
-  <div id="movie" :style="{ backgroundImage: `url(${ bg })` }">
-     <h1 id="movie-title">{{ this.movie.title ||  this.movie.name }}</h1>
+  <div id="movie" :style="{ backgroundImage: `url(${ image_path }${ movie.backdrop_path })` }">
+     <h1 id="movie-title">{{ movie.title ||  movie.name }}</h1>
      
       <p id="about">
         {{ this.movie.overview }}
@@ -8,49 +8,91 @@
       <div id="info">
           <div id="rating">
               <p>Rating</p>
-              <p style="text-align: center">{{ this.movie.vote_average }}</p>
+              <p style="text-align: center">{{ movie.vote_average }}</p>
           </div>
           <div id="release">
               <p>Release</p>
-              <p>{{ this.movie.release_date || this.movie.first_air_date }}</p>
+              <p>{{ movie.release_date || movie.first_air_date }}</p>
           </div>
           <div id="genre">
               <p>Genre</p>
-              <p v-for="genre in this.movie.genre_ids" :key="genre" style="display: inline">{{ genre }} </p>
+              <p  style="display: inline" v-for="genre in movie.genres" :key="genre.id">{{ genre.name+ " " }} </p>
           </div>
-          <div id="adult">
+          <div id="adult" v-if="movie.adult">
               <p>18+</p>
+          </div>
+      </div>
+      <div id="production"> 
+          <div class="company" v-for="company in movie.production_companies" :key="company.id">
+            <img class="logo" :src="returnImage(company.logo_path)" alt="">
+             <h4>{{ company.name }}  , {{ company.origin_country }}</h4>
           </div>
       </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import requests from '../requests';
 
 export default {
   name: 'Movie',
-    props: ["title" , "movie"],
+    props: ["title" , "movieID"],
   data(){
       return{
-        genre:[],
-          image_path : 'https://image.tmdb.org/t/p/original/',
-          bg : 'https://image.tmdb.org/t/p/original' + this.movie.backdrop_path,
-           poster : 'https://image.tmdb.org/t/p/original' + this.movie.poster_path
+          image_path : 'https://image.tmdb.org/t/p/original',
+          movie : [],
       }
   },
   methods:{
-     
+     returnImage(logo){
+          return this.image_path + logo;
+    },
+      getData(){
+        this.movie =  this.$store.getters.getCurrent
+        }
   }
   ,
   mounted: function(){
-    
+   let  id = this.movieID;
+        axios.get(`https://api.themoviedb.org/3/movie/${ id }?api_key=${requests.api_key}&language=en-US`)
+                .then((res) => {
+                  this.$store.dispatch('setCurrent', res.data );
+                  this.movie = res.data;
+                  this.getData();
+                })
+                .catch(err =>{
+                  console.log(err);
+                })
   }
 }
 </script>
 
 <style scoped>
+.logo{
+  margin: 0 auto;
+  padding-left: 20px;
+  max-width: 85px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+#production{
+   display: flex;
+   height: 180px;
+  justify-content: center;
+  margin-top: 160px;
+  padding:0 100px;
+   background-image: linear-gradient(#11111126, #111111FF);
+}
+
+.company > h4{
+  color: white;
+  padding: 0 20px;
+}
+
 #rating{
-   font-size: 2vw;
+   font-size: 1.7vw;
   color : white;
   margin-right: 15px ;
   background-color:  #111111BD;
@@ -63,7 +105,7 @@ export default {
 }
 
 #release{
-   font-size: 2vw;
+   font-size: 1.7vw;
   color : white;
    margin-right: 15px ;
     background-color:  #111111BD;
@@ -76,16 +118,18 @@ export default {
 }
 
 #genre{
-   font-size: 2vw;
+  font-size: 1.7vw;
   color : white;
    margin-right: 15px ;
     background-color:  #111111BD;
-    width: 12vw;
+    min-width:12vw;
   text-align: center;
   height: 5vw;
   padding-top: .9vw ;
   border: none;
   border-radius: 15px;
+  padding-right: 15px;
+   padding-left: 15px;
 }
 
 #adult{

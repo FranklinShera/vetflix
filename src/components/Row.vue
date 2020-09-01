@@ -37,8 +37,9 @@ export default {
         movietitle = movie.name
       }
       let movieName = movietitle + " " + movie.id
+      let movieID = movie.id;
       let title = movieName.toLowerCase().replace(/ /g , "-");
-       this.$router.push({ name: 'movie', params: {  title ,  movie } });
+       this.$router.push({ name: 'movie', params: {  title , movieID  } });
     }
      
   }
@@ -59,12 +60,12 @@ export default {
 }
 
 .large-row{
-  height: 350px;
+  height: 300px;
   
 }
 
 .small-row{
-  height: 240px;
+  height: 210px;
 }
 
 .large-poster:hover{

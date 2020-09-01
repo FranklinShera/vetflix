@@ -1,13 +1,13 @@
 <template>
-  <div id="hero" :style="{ backgroundImage : `url(${'https://image.tmdb.org/t/p/original'+ this.shown.backdrop_path } )`}">
+  <div id="hero" :style="{ backgroundImage : `url(${ image_path }${ shown.backdrop_path } )`}">
      <div class="hero-info">
-        <h2 class="hero-title">{{ this.shown.title }}</h2>
+        <h2 class="hero-title">{{ shown.title }}</h2>
       <div class="hero-btns">
         <button class="hero-btn">Play</button>
         <button class="hero-btn">My List</button>
       </div>
 
-      <p class="movie-overview">{{ this.shown.overview }}</p>
+      <p class="movie-overview">{{ shown.overview }}</p>
     </div>
     <div class="shadow"></div>
   </div>
@@ -20,7 +20,7 @@ export default {
   props : ["movies"],
   data(){
       return{
-          image_path : 'https://image.tmdb.org/t/p/original/',
+          image_path : 'https://image.tmdb.org/t/p/original',
          
       }
   },
@@ -28,7 +28,7 @@ export default {
      
   },
   computed:{
-    shown: function (){
+    shown: function(){
 
         return this.movies[Math.floor((Math.random() * this.movies.length) + 1)];
          
@@ -39,6 +39,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .shadow{
+    height: 60px;
+    width: 100%;
+    margin-top: 30px;
+    background-image: linear-gradient(#11111100, rgb(0, 0, 0));
+  }
   #hero{
     height: 448px;
     object-fit: contain;
@@ -64,8 +70,9 @@ export default {
     border:none;
     padding:5px;
     font-size: 1.5vw;
+    font-weight: 600;
     margin-top: 20px;
-    height: 3vw;
+    height: 2.8vw;
     width: 8vw;
     margin-right: 20px;
   }

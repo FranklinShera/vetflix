@@ -16,4 +16,7 @@
         actionMovies: `${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=28`,
         comedyMovies: `${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=35`,
         horrorMovies: `${API_URL}/discover/movie?api_key=${API_KEY}&with_genres=27`, 
+        getGenres: `${API_URL}/genre/movie/list?api_key=${API_KEY}&language=en-US`,
+        api_key: '7a679a23f3756b0936856515859ef5d8'
+        
     }

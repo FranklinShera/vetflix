@@ -12,8 +12,13 @@ export default  new Vuex.Store({
        actionMovies: [],
        trendingMovies: [],
 
+       onViewed: [],
+
     },
     getters:{
+        getCurrent(state){
+            return state.onViewed;
+        },
         getNetflix(state){
             return state.netflixOriginals.results;
         },
@@ -34,6 +39,9 @@ export default  new Vuex.Store({
         }
     },
     mutations: {
+        setCurrent(state, onView){
+            state.onViewed = onView;
+        },
         setNetflix(state, netFlix){
             state.netflixOriginals = netFlix;
         },
@@ -59,6 +67,9 @@ export default  new Vuex.Store({
         },
     },
     actions: {
+        setCurrent({ commit }, onView){
+            commit('setCurrent', onView);
+        },
         setNetflix({ commit }, netFlix){
             commit('setNetflix', netFlix);
         },

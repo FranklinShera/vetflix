@@ -15,6 +15,10 @@
 <script>
 
 import axios from 'axios'
+ window.addEventListener("load", function(event) {
+      window.scrollTo(0, 0)
+      console.log(event);
+  });
 
 
 import requests from './requests';
@@ -106,6 +110,11 @@ mounted: function (){
 </script>
 
 <style>
+html {
+  scroll-behavior: smooth;
+}
+
+
 #logo{
   height: 40px;
   margin-left: 30px;
@@ -116,6 +125,7 @@ mounted: function (){
   margin-top: 20px;
   margin-right: 30px;
   color: #E50914;
+ filter: drop-shadow(0 0 2px #111);
 }
 
 

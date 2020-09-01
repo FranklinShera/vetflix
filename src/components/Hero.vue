@@ -1,5 +1,5 @@
 <template>
-  <div id="hero" :style="{ backgroundImage : `url(${'https://image.tmdb.org/t/p/original'+ this.shown.backdrop_path})`}">
+  <div id="hero" :style="{ backgroundImage : `url(${'https://image.tmdb.org/t/p/original'+ this.shown.backdrop_path } )`}">
      <div class="hero-info">
         <h2 class="hero-title">{{ this.shown.title }}</h2>
       <div class="hero-btns">

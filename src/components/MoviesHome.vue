@@ -1,6 +1,6 @@
 <template>
   <div id="movie-home">
-      <Hero :movies="[ ...topRated]"/>
+      <Hero :movies="[ ...collection ]"/>
     <Row title="Netflix Originals" isLarge :movies="{ ...netflixOriginals }"/>
     <Row title="Trending Movies" :isLarge="false"  :movies="{ ...trending }" />
     <Row title="Top Rated Movies" :isLarge="false" :movies="{ ...topRated }" />
@@ -28,19 +28,22 @@ export default {
   },
   data(){
       return{
-           netflixOriginals: [],
+            netflixOriginals: [],
             horrorMovies: [],
             comedyMovies: [],
             topRated: [],
             actionMovies: [],  
             trending: [],  
+            collection:[]
       }
   },
   methods:{
-     
+
+    putMovies(){
+            this.collection = [...this.netflixOriginals, ...this.horrorMovies, ...this.comedyMovies, ...this.topRated, ...this.actionMovies,...this.trending ];     
+    }
   },
   mounted: function (){
-      
             axios.get(requests.netflixOriginals)
                 .then((res) => {
                   this.netflixOriginals = res.data.results;
@@ -86,6 +89,8 @@ export default {
                 .then((res) =>{
                         this.horrorMovies = res.data.results;
 
+                }).then(() =>{
+                     this.putMovies();
                 })
                 .catch(err =>{
                   console.log(err);

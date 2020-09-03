@@ -118,6 +118,7 @@ footer{
   display: flex;
   align-items: baseline;
   justify-content: center;
+  margin-bottom: 20px;
 }
 
  * {
@@ -140,7 +141,6 @@ html {
 
 #logo2{
   height: 12px;
-  margin-left: 30px;
   margin-top: 20px;
 }
 

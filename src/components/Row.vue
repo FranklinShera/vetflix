@@ -48,6 +48,33 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+#poster_row{
+  display: flex;
+  margin-left: 25px;
+  margin-top: 20px;
+  margin-bottom: 100px;
+
+ /* overflow-y: hidden;
+  overflow-x: scroll; 
+  scrollbar-width: none;*/
+}
+
+   @-moz-document url-prefix() { /* Disable scrollbar Firefox */
+            html{
+              scrollbar-width: none;
+            }
+          }
+          body {
+            margin: 0; /* remove default margin */
+            scrollbar-width: none; /* Also needed to disable scrollbar Firefox */
+            -ms-overflow-style: none;  /* Disable scrollbar IE 10+ */
+            overflow-y: scroll;
+            overflow-x: scroll; 
+          }
+          body::-webkit-scrollbar {
+            width: 0px;
+            background: transparent; /* Disable scrollbar Chrome/Safari/Webkit */
+          }
 
 .large-poster{
   height: 240px;
@@ -87,18 +114,7 @@ export default {
 
 }
 
-#poster_row{
-  display: flex;
-  margin-left: 25px;
-  margin-top: 20px;
-  margin-bottom: 100px;
 
-  /* overflow-y: hidden;
-  overflow-x: scroll;  */
-}
-#poster_row::-webkit-scrollbar {
-  display: none;
-}
 
 #poster{
  padding-left: 5px;

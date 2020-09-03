@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 
+import YouTube from 'vue-youtube'
+
 Vue.config.productionTip = false
 
 import VueRouter from 'vue-router'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter,YouTube);
 import {routes} from './routes';
 
 

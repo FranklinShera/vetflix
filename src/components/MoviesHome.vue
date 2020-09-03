@@ -7,7 +7,7 @@
     <Row title="Horror Movies" :isLarge="false" :movies="{ ...horrorMovies }"/>
     <Row title="Action Movies" :isLarge="false" :movies="{ ...actionMovies }"/>
     <Row title="Comedy Movies" :isLarge="false" :movies="{ ...comedyMovies }"/>
-    
+   
   </div>
 </template>
 

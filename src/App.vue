@@ -8,7 +8,8 @@
     <router-view @scroll="checkBg">
     </router-view>
  
-    
+     <footer> <img id="logo2" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/255px-Netflix_2015_logo.svg.png" alt="">
+      Demo Created By &nbsp; <span id="footer-name"><a style="color: white;text-decoration: none;margin-left: 3px" href="mailto:me@sheraclassics.co.ke">&nbsp; Franklin Shera</a> {{  new Date().getFullYear() }}</span></footer>
   </div>
 </template>
 
@@ -111,10 +112,25 @@ mounted: function (){
 </script>
 
 <style>
+
+footer{
+  color: white;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+ * {
+    padding: 0;
+    margin : 0;
+  }
 html {
   scroll-behavior: smooth;
 }
 
+.app{
+  background-color: #111;
+}
 
 #logo{
   height: 40px;
@@ -122,6 +138,16 @@ html {
   margin-top: 20px;
 }
 
+#logo2{
+  height: 12px;
+  margin-left: 30px;
+  margin-top: 20px;
+}
+
+.footer-name{
+  font-weight: 900;
+  font-size: 1rem;
+}
 #my-name{
   margin-top: 20px;
   margin-right: 30px;
@@ -130,10 +156,7 @@ html {
 }
 
 
-  * {
-    padding: 0;
-    margin : 0;
-  }
+ 
 
 header{
   position: fixed;
@@ -151,4 +174,33 @@ header{
 header > h1, header > span {
   margin-left: 20px;
 }
+
+
+
+@media (max-width: 720px) {
+    #logo{
+      height: 25px;
+      margin-left: 30px;
+      margin-top: 12px;
+    }
+
+    #my-name{
+      margin-top: 12px;
+      margin-right: 30px;
+      color: white;
+    filter: drop-shadow(0 0 2px #111);
+    }
+
+    header{
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 50px;
+      transition: ease-in;
+      display: flex;
+      justify-content: space-between;
+    }
+}
+
+
 </style>

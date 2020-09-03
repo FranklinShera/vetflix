@@ -79,6 +79,7 @@ export default {
  
  transition: transform 450ms;
 }
+
 #title{
     color: white !important;
     margin-bottom: 15px;
@@ -104,7 +105,65 @@ export default {
  object-fit: contain;
  transition: transform 450ms;
 }
-#poster:hover{
-  /* transform: scale(1.1); */
+
+
+
+
+@media (max-width: 720px) {
+
+#poster{
+ object-fit: contain;
+ transition: transform 450ms;
+}
+#title{
+font-size: 4vw;
+}
+#poster_row{
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 40px;
+
+  overflow-y: hidden;
+  overflow-x: scroll;  
+}
+
+#poster{
+ object-fit: contain;
+ transition: transform 450ms;
+}
+
+
+.large-poster{
+  height: 170px;
+  margin-right: 2px;
+}
+
+.small-poster{
+  height: 85px;
+  margin-right: 2px;
+}
+
+.large-row{
+  height: 200px;
+  margin-bottom: 10px;
+}
+
+.small-row{
+  height: 110px;
+  margin-bottom: 20px;
+}
+
+.large-poster:hover{
+  transform: scale(1.09);
+  
+ transition: transform 450ms;
+}
+
+.small-poster:hover{
+ transform: scale(1.05);
+ 
+ transition: transform 450ms;
+}
+
 }
 </style>

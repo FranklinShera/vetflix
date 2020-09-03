@@ -2,12 +2,15 @@
   <div id="hero" :style="{ backgroundImage : `url(${ image_path }${ shown.backdrop_path } )`}">
      <div class="hero-info">
         <h2 class="hero-title">{{ shown.title }}</h2>
-      <div class="hero-btns">
-        <button class="hero-btn" @click="download()">Play</button>
-        <button class="hero-btn" @click="vfx()">My List</button>
-      </div>
+        <div class="hero-btns">
+          <button class="hero-btn" @click="playTrailer(shown)">Play</button>
+          <button class="hero-btn" @click="vfx()">My List</button>
+        </div>
 
-      <p class="movie-overview">{{ shown.overview }}</p>
+        <p class="movie-overview">
+        {{ shown.overview.slice(0 , 198) }}
+          <span v-if="shown.overview.length > 198">...</span>
+        </p>
     </div>
     <div class="shadow"></div>
   </div>
@@ -27,6 +30,18 @@ export default {
       }
   },
   methods:{
+    playTrailer(movie){
+      let movietitle ='';
+      if(movie.title){
+          movietitle = movie.title
+      }else{
+        movietitle = movie.name
+      }
+      let movieName = movietitle + " " + movie.id
+      let movieID = movie.id;
+      let title = movieName.toLowerCase().replace(/ /g , "-");
+       this.$router.push({ name: 'movie', params: {  title , movieID  } });
+    },
     vfx(){
         let img = []
 
@@ -103,12 +118,15 @@ export default {
     height: 448px;
     object-fit: contain;
     margin-bottom: 15px;
+    background-size: cover;
+    background-position: center center;
   }
 
   .hero-info{
     color: white;
     margin-left: 30px;
     padding-top: 200px;
+    height: 190px;
     
   }
 
@@ -140,5 +158,38 @@ export default {
   .movie-overview{
     margin-top: 10px;
     width: 39vw;
+  }
+
+
+  @media (max-width: 720px) {
+           .hero-title{
+            font-size: 8vw;
+            font-weight: 800;
+          }
+
+          .hero-info{
+            margin: 0 20px;
+          }
+
+          .hero-btns{
+            display: flex;
+            justify-content: space-between;
+          }
+
+         .hero-btn{
+            border-radius: 5px;
+            border:none;
+            padding:5px;
+            font-size: 4.5vw;
+            font-weight: 600;
+            margin-top: 20px;
+            height: 8vw;
+            width: 32vw;
+          }
+
+       .movie-overview{
+        margin-top: 10px;
+        width: 72vw;
+      }
   }
 </style>

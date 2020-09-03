@@ -1,6 +1,6 @@
 <template>
   <div id="movie-home">
-      <Hero :movies="[ ...collection ]"/>
+      <Hero :movies="[ ...collection ]" />
     <Row title="Netflix Originals" isLarge :movies="{ ...netflixOriginals }"/>
     <Row title="Trending Movies" :isLarge="false"  :movies="{ ...trending }" />
     <Row title="Top Rated Movies" :isLarge="false" :movies="{ ...topRated }" />
@@ -34,7 +34,7 @@ export default {
             topRated: [],
             actionMovies: [],  
             trending: [],  
-            collection:[]
+            collection:[],
       }
   },
   methods:{
@@ -44,6 +44,8 @@ export default {
     }
   },
   mounted: function (){
+            
+
             axios.get(requests.netflixOriginals)
                 .then((res) => {
                   this.netflixOriginals = res.data.results;

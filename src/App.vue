@@ -17,6 +17,7 @@
 import axios from 'axios'
  window.addEventListener("load", function(event) {
       window.scrollTo(0, 0)
+      console.log(process.env.TMDB_API_KEY);
       console.log(event);
   });
 

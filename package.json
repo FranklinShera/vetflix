@@ -10,7 +10,9 @@
   "dependencies": {
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "js-file-download": "^0.4.12",
     "movie-trailer": "^2.0.6",
+    "node-image-downloader": "^1.0.7",
     "vue": "^2.6.11",
     "vue-router": "^3.4.3",
     "vue-youtube": "^1.4.0",

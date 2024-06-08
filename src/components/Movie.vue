@@ -1,34 +1,34 @@
 <template>
-  <div id="movie" :style="{ backgroundImage: `url(${image_path}${movie.backdrop_path})` }">
+  <div class="movie" v-if="!!movie" :style="{ backgroundImage: `url(${movie.big_image})` }">
 
 
-    <div id="trailer" :class="{ 'novideo': !videoId }">
+    <div class="trailer" :class="{ 'novideo': !videoId }">
       <iframe v-if="videoId" width="800" height="480" :src="videoURL" frameborder="0"
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
 
 
-    <h1 id="movie-title">{{ movie.title || movie.name }}</h1>
+    <h1 class="movie-title">{{ movie.title }}</h1>
 
-    <p id="about">
-      {{ this.movie.overview }}
+    <p class="about">
+      {{ movie.description }}
     </p>
-    <div id="info">
-      <div id="rating">
+    <div class="info">
+      <div class="rating">
         <p>Rating</p>
-        <p style="text-align: center">{{ movie.vote_average }}</p>
+        <p style="text-align: center">{{ movie.rating }}</p>
       </div>
-      <div id="release">
+      <!-- <div id="release">
         <p>Release</p>
-        <p>{{ movie.release_date || movie.first_air_date }}</p>
-      </div>
-      <div id="genre">
+        <!-- <p>{{ movie.release_date || movie.first_air_date }}</p>  
+      </div> -->
+      <div class="genre">
         <p>Genre</p>
-        <p style="display: inline" v-for="genre in movie.genres" :key="genre.id">{{ genre.name + " " }} </p>
+        <p style="display: inline" v-for="genre in movie.genre" :key="genre">{{ genre + " " }} </p>
       </div>
-      <div id="adult" v-if="movie.adult">
+      <!-- <div id="adult" v-if="movie">
         <p>18+</p>
-      </div>
+      </div> -->
     </div>
 
   </div>
@@ -36,50 +36,23 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import mov, { type Movies } from '../data/movies';
+import { useRoute } from 'vue-router';
 
 
-const props = defineProps<{ title: string, movieID: string }>()
+const route = useRoute()
 
 const videoId = ref('');
 const videoLink = 'https://www.youtube.com/embed/';
-const image_path = 'https://image.tmdb.org/t/p/original';
-const movie = ref([]);
-
-const returnImage = (logo) => {
-  return image_path + logo;
-};
-
-const getData = () => {
-  movie.value = this.$store.getters.getCurrent;
-};
+const movie = ref<Movies>();
 
 const videoURL = computed(() => {
   return videoLink + videoId.value + "?&autoplay=1";
 });
 
 onMounted(() => {
-  const id = props.movieID;
-  // axios.get(`https://api.themoviedb.org/3/movie/${id}?api_key=${requests.api_key}&language=en-US`)
-  //   .then((res) => {
-  //     this.$store.dispatch('setCurrent', res.data);
-  //     movie.value = res.data;
-  //     getData();
-  //   })
-  //   .then(() => {
-  //     let name = '';
-  //     if (movie.value.title) {
-  //       name = movie.value.title;
-  //     } else if (movie.value.name) {
-  //       name = movie.value.name;
-  //     } else if (movie.value.original_title) {
-  //       name = movie.value.original_title;
-  //     }
-  //     movieTrailer(name, { id: true, multi: true })
-  //       .then(response => videoId.value = response[0]);
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //   });
+
+  movie.value = mov.moviesAndSeries.find((movie) => movie.imdbid == route.params.id);
 });
 </script>
 
@@ -88,7 +61,7 @@ onMounted(() => {
   height: 300px
 }
 
-#trailer {
+.trailer {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -104,7 +77,7 @@ onMounted(() => {
   display: block;
 }
 
-#rating {
+.rating {
   font-size: 1.7vw;
   color: white;
   margin-right: 15px;
@@ -118,7 +91,7 @@ onMounted(() => {
 }
 
 
-#release {
+.release {
   font-size: 1.7vw;
   color: white;
   margin-right: 15px;
@@ -131,7 +104,7 @@ onMounted(() => {
   border-radius: 15px;
 }
 
-#genre {
+.genre {
   font-size: 1.7vw;
   color: white;
   margin-right: 15px;
@@ -146,7 +119,7 @@ onMounted(() => {
   padding-left: 15px;
 }
 
-#adult {
+.adult {
   font-size: 4.5vw;
   color: #E50914;
   background-color: #111111BD;
@@ -159,7 +132,7 @@ onMounted(() => {
 }
 
 
-#info {
+.info {
   display: flex;
   justify-content: center;
   margin-top: 20px;
@@ -170,7 +143,7 @@ iframe {
 
 }
 
-#movie-title {
+.movie-title {
   text-align: center;
   font-size: 5vw;
   color: white;
@@ -179,17 +152,18 @@ iframe {
   filter: drop-shadow(0 0 2px #a84032);
 }
 
-#movie {
+.movie {
   height: 1000px;
   object-fit: contain;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
   background-position: center center;
+  margin: 0 auto;
 }
 
 
-#about {
+.about {
   text-align: center;
   color: white;
   width: 800px;
@@ -210,7 +184,7 @@ iframe {
     height: 300px;
   }
 
-  #movie {
+  .movie {
     height: 100%;
     object-fit: contain;
     background-repeat: no-repeat;
@@ -218,7 +192,7 @@ iframe {
   }
 
 
-  #about {
+  .about {
     text-align: center;
     color: white;
     width: 80%;
@@ -230,7 +204,7 @@ iframe {
     border-radius: 15px;
   }
 
-  #movie-title {
+  .movie-title {
     text-align: center;
     font-size: 8.7vw;
     color: white;
@@ -249,7 +223,7 @@ iframe {
     display: block;
   }
 
-  #production {
+  .production {
     display: flex;
     height: 180px;
     justify-content: center;
@@ -260,7 +234,7 @@ iframe {
 
 
 
-  #rating {
+  .rating {
     font-size: 3vw;
     color: white;
     margin-right: 15px;
@@ -273,7 +247,7 @@ iframe {
     border-radius: 5px;
   }
 
-  #release {
+  .release {
     font-size: 3vw;
     color: white;
     margin-right: 15px;
@@ -286,7 +260,7 @@ iframe {
     border-radius: 5px;
   }
 
-  #genre {
+  .genre {
     font-size: 2.8vw;
     color: white;
     margin-right: 15px;
@@ -301,7 +275,7 @@ iframe {
     padding-left: 15px;
   }
 
-  #adult {
+  .adult {
     font-size: 5.5vw;
     color: #E50914;
     background-color: #111111BD;
@@ -314,7 +288,7 @@ iframe {
   }
 
 
-  #info {
+  .info {
     display: flex;
     justify-content: center;
     margin-top: 20px;

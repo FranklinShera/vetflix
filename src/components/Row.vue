@@ -1,10 +1,11 @@
 <template>
-  <div :class="{ 'large-row': props isLarge, 'small-row': !props.isLarge }">
-    <h2 id="title">{{ props.title }}</h2>
-    <div id="poster_row">
-      <div id="poster" @click="viewMovie(movie)" v-for="movie in props.movies" :key=movie.id>
-        <img :src="returnImage(movie.poster_path, movie.backdrop_path)"
-          :class="{ 'large-poster': isLarge, 'small-poster': !isLarge }" alt="movie.title">
+  <div class="row" :class="{ 'large-row': props.isLarge, 'small-row': !props.isLarge }">
+    <h2 class="title">{{ props.title }}</h2>
+    <div class="poster_row">
+      <div class="poster" @click="viewMovie(movie)" v-for="movie in props.movies" :key=movie.id>
+        <img :data-src="returnImage(movie.image, movie.big_image)"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/255px-Netflix_2015_logo.svg.png"
+          :class="{ 'large-poster': isLarge, 'small-poster': !isLarge }" class="lazy-load" :alt="movie.title">
 
       </div>
     </div>
@@ -13,43 +14,50 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { Movies } from '../data/movies';
+
 
 const props = defineProps<{
   title: string,
-  movies: object,
+  movies: Movies[],
   isLarge: boolean
 }>();
 
-
-
-const image_path = 'https://image.tmdb.org/t/p/original/';
 const router = useRouter();
 
-function returnImage(poster, backdrop) {
-  return props.isLarge ? image_path + poster : image_path + backdrop;
+function returnImage(poster: string, backdrop: string) {
+  return props.isLarge ? poster : backdrop;
 };
 
-function viewMovie(movie) {
-  let movietitle = movie.title ? movie.title : movie.name;
-  let movieName = `${movietitle} ${movie.id}`.toLowerCase().replace(/ /g, "-");
-  let movieID = movie.id;
-  router.push({ name: 'movie', params: { title: movieName, movieID } });
+function viewMovie(movie: Movies) {
+
+  router.push({ name: 'movie', params: { id: movie.imdbid } });
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#poster_row {
-  display: flex;
-  margin-left: 25px;
-  margin-top: 20px;
-  margin-bottom: 100px;
+.row {
+  translate: var(--spacing-x) 0px;
 
-  /* overflow-y: hidden;
-  overflow-x: scroll; 
-  scrollbar-width: none;*/
+  max-width: 100%;
+}
+
+
+
+.poster_row {
+  display: flex;
+  padding-left: 25px;
+  margin-top: 20px;
+  /* margin-bottom: 200px; */
+
+  /* overflow-y: hidden; */
+  overflow-x: scroll;
+  scrollbar-width: none;
+
+  scroll-snap-type: x mandatory;
+  scroll-padding: 10px;
 }
 
 @-moz-document url-prefix() {
@@ -67,8 +75,8 @@ body {
   /* Also needed to disable scrollbar Firefox */
   -ms-overflow-style: none;
   /* Disable scrollbar IE 10+ */
-  overflow-y: scroll;
-  overflow-x: scroll;
+  /* overflow-y: scroll; */
+  /* overflow-x: hidden; */
 }
 
 body::-webkit-scrollbar {
@@ -78,26 +86,26 @@ body::-webkit-scrollbar {
 }
 
 .large-poster {
-  height: 240px;
+  height: 250px;
   margin-right: 5px;
 }
 
 .small-poster {
-  height: 130px;
+  height: 200px;
   margin-right: 5px;
 }
 
 .large-row {
-  height: 300px;
+  /* height: 300px; */
 
 }
 
 .small-row {
-  height: 210px;
+  /* height: 210px; */
 }
 
 .large-poster:hover {
-  transform: scale(1.09);
+  transform: scale(1.0);
 
   transition: transform 450ms;
 }
@@ -108,7 +116,7 @@ body::-webkit-scrollbar {
   transition: transform 450ms;
 }
 
-#title {
+.title {
   color: white !important;
   margin-bottom: 15px;
   margin-left: 15px;
@@ -117,10 +125,11 @@ body::-webkit-scrollbar {
 
 
 
-#poster {
+.poster {
   padding-left: 5px;
   object-fit: contain;
   transition: transform 450ms;
+  scroll-snap-align: start;
 }
 
 
@@ -128,16 +137,16 @@ body::-webkit-scrollbar {
 
 @media (max-width: 720px) {
 
-  #poster {
+  .poster {
     object-fit: contain;
     transition: transform 450ms;
   }
 
-  #title {
+  .title {
     font-size: 4vw;
   }
 
-  #poster_row {
+  .poster_row {
     display: flex;
     margin-top: 10px;
     margin-bottom: 40px;
@@ -146,7 +155,7 @@ body::-webkit-scrollbar {
     overflow-x: scroll;
   }
 
-  #poster {
+  .poster {
     object-fit: contain;
     transition: transform 450ms;
   }

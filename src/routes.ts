@@ -4,7 +4,7 @@ import Movie from "./components/Movie.vue";
 import MoviesHome from "./components/MoviesHome.vue";
 
 const routes = [
-  { path: "/:title", component: Movie },
+  { path: "/:id", name: "movie", component: Movie },
   { path: "/", component: MoviesHome },
 ];
 

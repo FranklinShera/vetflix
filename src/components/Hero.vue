@@ -1,5 +1,6 @@
 <template>
-  <div id="hero" :style="{ backgroundImage: `url(${image_path}${shown.backdrop_path} )` }">
+
+  <div id="hero" v-if="!!movie" :style="{ backgroundImage: `url( ${movie.big_image} )`, backgroundColor: '#111' }">
     <div :class="{ 'modal-active': modal }" class="modal-bg" @click="download()">
       <div class="modal">
         <p class="logo-text">Click The Logo</p>
@@ -9,15 +10,15 @@
       </div>
     </div>
     <div class="hero-info">
-      <h2 class="hero-title">{{ shown.title }}</h2>
+      <h2 class="hero-title">{{ movie.title }}</h2>
       <div class="hero-btns">
-        <button class="hero-btn" @click="playTrailer(shown)">Play</button>
+        <button class="hero-btn" @click="playTrailer(movie)">Play</button>
         <button class="hero-btn" @click="vfx()">My List</button>
       </div>
 
       <p class="movie-overview">
-        {{ shown.overview.slice(0, 198) }}
-        <span v-if="shown.overview.length > 198">...</span>
+        {{ movie.description.slice(0, 300) }}
+        <span v-if="movie.description.length > 300">...</span>
       </p>
     </div>
 
@@ -28,47 +29,33 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import type { Movies } from '../data/movies';
 
-const props = defineProps<{ movies: unknown[] }>()
+const props = defineProps<{ movies: Movies[] }>()
 
 const router = useRouter();
 const modal = ref(false);
-const image_path = 'https://image.tmdb.org/t/p/original';
-const posters = ref([]);
+const posters = ref<{ url: string, filename: string }[]>([]);
 
-const playTrailer = (movie) => {
-  let movietitle = movie.title ? movie.title : movie.name;
-  let movieName = `${movietitle} ${movie.id}`.toLowerCase().replace(/ /g, "-");
+const playTrailer = (movie: Movies) => {
+
+  let movieName = `${movie.title} ${movie.id}`.toLowerCase().replace(/ /g, "-");
   let movieID = movie.id;
   router.push({ name: 'movie', params: { title: movieName, movieID } });
 };
 
 const vfx = () => {
   modal.value = true;
-  let img = [];
+  posters.value = props.movies.map((movie) => {
 
-  props.movies.forEach((movie) => {
-    let file_name = '';
-    let loc = '';
 
-    if (movie.name) {
-      loc = `${image_path}${movie.poster_path}`;
-      file_name = movie.name;
-    } else if (movie.original_name) {
-      loc = `${image_path}${movie.poster_path}`;
-      file_name = movie.original_name;
-    } else if (movie.title) {
-      loc = `${image_path}${movie.poster_path}`;
-      file_name = movie.title;
+
+    return {
+      url: movie.image,
+      filename: movie.title.replace(/ /g, "-")
     }
-
-    img.push({
-      url: loc,
-      filename: file_name.replace(/ /g, "-")
-    });
   });
 
-  posters.value = img;
 };
 
 const download = () => {
@@ -85,9 +72,12 @@ const download = () => {
   });
 };
 
-const shown = computed(() => {
+const movie = computed(() => {
   return props.movies[Math.floor(Math.random() * props.movies.length)];
 });
+
+
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -126,24 +116,34 @@ const shown = computed(() => {
 
 
 .shadow {
-  height: 3.6rem;
+  height: 60%;
   background-image: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.61), #111);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: -1;
 }
 
 #hero {
-  height: 448px;
-  object-fit: contain;
+  height: 80vh;
+  /* object-fit: contain; */
   margin-bottom: 15px;
-  background-size: cover;
-  background-position: center center;
+  /* background-repeat: no-repeat; */
+  background-size: contain;
+
+  position: relative;
+  isolation: isolate;
+
 }
 
 .hero-info {
   color: white;
-  margin-left: 30px;
-  padding-top: 200px;
-  height: 190px;
-
+  padding-inline: var(--spacing-x, 0);
+  padding-bottom: 150px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .hero-title {

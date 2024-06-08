@@ -1,16 +1,15 @@
 <template>
   <div id="movie-home">
-    <Hero :movies="[...collection]" />
-    <Row title="Netflix Originals" isLarge :movies="{ ...netflixOriginals }" />
-    <Row title="Airing Today" :isLarge="false" :movies="{ ...airingToday }" />
-    <Row title="TV Shows On Air" :isLarge="false" :movies="{ ...tvOnAir }" />
-    <Row title="Trending Movies" :isLarge="false" :movies="{ ...trending }" />
-    <Row title="Top Rated Movies" :isLarge="false" :movies="{ ...topRated }" />
-    <Row title="Horror Movies" :isLarge="false" :movies="{ ...horrorMovies }" />
-    <Row title="Action Movies" :isLarge="false" :movies="{ ...actionMovies }" />
-    <Row title="Comedy Movies" :isLarge="false" :movies="{ ...comedyMovies }" />
-    <Row title="Discover Movies" :isLarge="false" :movies="{ ...dicoverMovie }" />
-    <Row title="Discover TV Shows" :isLarge="false" :movies="{ ...discoverTv }" />
+
+    <Hero :movies="collection" />
+
+    <div class="movie-rows">
+
+      <Row title="Latest Movies" isLarge :movies="latest" />
+      <Row v-for="cat in catalog" :key="cat.title" :title="cat.title + ' Movies'" :isLarge="false"
+        :movies="cat.items" />
+    </div>
+
 
   </div>
 </template>
@@ -19,122 +18,39 @@
 import { ref, onMounted } from 'vue';
 import Row from './Row.vue';
 import Hero from './Hero.vue';
-import requests from '../requests';
+import mov, { Movies } from "../data/movies"
 
+const catalog = ref<{ title: string; items: Movies[] }[]>([])
 
-const netflixOriginals = ref([]);
-const horrorMovies = ref([]);
-const comedyMovies = ref([]);
-const topRated = ref([]);
-const actionMovies = ref([]);
-const trending = ref([]);
-const collection = ref([]);
-const tvOnAir = ref([]);
-const airingToday = ref([]);
-const dicoverMovie = ref([]);
-const discoverTv = ref([]);
-
-const putMovies = () => {
-  collection.value = [
-    ...tvOnAir.value,
-    ...airingToday.value,
-    ...dicoverMovie.value,
-    ...discoverTv.value,
-    ...netflixOriginals.value,
-    ...horrorMovies.value,
-    ...comedyMovies.value,
-    ...topRated.value,
-    ...actionMovies.value,
-    ...trending.value,
-  ];
-};
+const latest = ref<Movies[]>([]);
+const collection = ref<Movies[]>([]);
 
 onMounted(() => {
-  axios.get(requests.discoverTv)
-    .then((res) => {
-      discoverTv.value = res.data.results;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  collection.value = mov.moviesAndSeries.sort((a, b) => b.rating - a.rating)
 
-  axios.get(requests.dicoverMovie)
-    .then((res) => {
-      dicoverMovie.value = res.data.results;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  catalog.value = mov.genres.map((genre) => {
+    return {
+      title: genre,
+      items: mov.moviesAndSeries
+        .filter((movie) => movie.genre.includes(genre))
+        .sort((a, b) => b.rating - a.rating),
+    };
+  });
 
-  axios.get(requests.airingToday)
-    .then((res) => {
-      airingToday.value = res.data.results;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
 
-  axios.get(requests.tvOnAir)
-    .then((res) => {
-      tvOnAir.value = res.data.results;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  latest.value = mov.moviesAndSeries.sort((a, b) => b.year.start - a.year.start)
 
-  axios.get(requests.netflixOriginals)
-    .then((res) => {
-      netflixOriginals.value = res.data.results;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  axios.get(requests.topRated)
-    .then((res) => {
-      topRated.value = res.data.results;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  axios.get(requests.trending)
-    .then((res) => {
-      trending.value = res.data.results;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  axios.get(requests.actionMovies)
-    .then((res) => {
-      actionMovies.value = res.data.results;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  axios.get(requests.comedyMovies)
-    .then((res) => {
-      comedyMovies.value = res.data.results;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  axios.get(requests.horrorMovies)
-    .then((res) => {
-      horrorMovies.value = res.data.results;
-    })
-    .then(() => {
-      putMovies();
-    })
-    .catch((err) => {
-      console.log(err);
-    });
 });
 </script>
 
 <style scoped>
 #movie-home {}
+
+
+.movie-rows {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-y) / 2);
+  width: 100%;
+}
 </style>
